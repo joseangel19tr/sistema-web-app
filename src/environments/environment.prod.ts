@@ -1,3 +1,5 @@
+// environment.prod.ts
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'https://sistema-api-sv42.onrender.com'
 };
