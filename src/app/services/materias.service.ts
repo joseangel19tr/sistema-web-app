@@ -140,7 +140,7 @@ export class MateriasService {
     const headers = this.buildHeaders();
     const payload = {
       ...materia,
-      dias: (materia.dias || []).join(',')   // arreglo → "Lunes,Martes"
+      dias: materia.dias || ''  
     };
     return this.http.post<any>(`${this.baseUrl}/materias/`, payload, { headers });
   }
@@ -156,7 +156,6 @@ export class MateriasService {
 
   public eliminarMateria(nrc: string): Observable<any> {
     const headers = this.buildHeaders();
-    // 👇 ESTA ES LA QUE NECESITAMOS PARA ELIMINAR
     return this.http.delete<any>(`${this.baseUrl}/materias/${nrc}/`, { headers });
   }
 }

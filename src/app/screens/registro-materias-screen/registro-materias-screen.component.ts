@@ -117,48 +117,57 @@ export class RegistroMateriasScreenComponent implements OnInit {
     }
   }
 
-  // ========= GUARDAR / ACTUALIZAR =========
   guardar(): void {
-    this.errors = this.materiasService.validarMateria(this.materia);
-    this.validarHorario();
+  console.log('Click en Guardar, materia actual:', this.materia);
 
-    // SOLO bloqueamos si el horario es inválido
-    if (this.errors.hora_inicio || this.errors.hora_fin) {
-      return;
-    }
+  this.errors = this.materiasService.validarMateria(this.materia);
+  this.validarHorario();
 
-    if (this.editar) {
-      if (!confirm('¿Estás seguro de actualizar la materia?')) {
-        return;
-      }
-      this.materiasService.actualizarMateria(this.nrcOriginal, this.materia).subscribe(
-        () => {
-          alert('Materia actualizada correctamente');
-          this.router.navigate(['/materias-lista']);
-        },
-        (error) => {
-          console.log('Error al actualizar materia', error);
-          alert('No se pudo actualizar la materia');
-        }
-      );
-    } else {
-      this.materiasService.crearMateria(this.materia).subscribe(
-        () => {
-          alert('Materia registrada correctamente');
-          this.router.navigate(['/materias-lista']);
-        },
-        (error) => {
-          console.log('Error al registrar materia', error);
-          if (error.error && error.error.nrc) {
-            this.errors.nrc = error.error.nrc;
-          } else {
-            alert('No se pudo registrar la materia');
-          }
-        }
-      );
-    }
+  // Bloqueamos solo si hay errores de horario
+  if (this.errors.hora_inicio || this.errors.hora_fin) {
+    return;
   }
 
+  // 🔹 Ajustamos payload según lo que espera el backend
+  const materiaPayload = {
+    ...this.materia,
+    dias: Array.isArray(this.materia.dias) ? this.materia.dias.join(',') : this.materia.dias,
+    profesor: Number(this.materia.profesor), // debe ser ID numérico válido
+    hora_inicio: this.materia.hora_inicio.length === 5 ? this.materia.hora_inicio + ':00' : this.materia.hora_inicio,
+    hora_fin: this.materia.hora_fin.length === 5 ? this.materia.hora_fin + ':00' : this.materia.hora_fin
+  };
+
+  if (this.editar) {
+    if (!confirm('¿Estás seguro de actualizar la materia?')) {
+      return;
+    }
+    this.materiasService.actualizarMateria(this.nrcOriginal, materiaPayload).subscribe(
+      () => {
+        alert('Materia actualizada correctamente');
+        this.router.navigate(['/materias-lista']);
+      },
+      (error) => {
+        console.log('Error al actualizar materia', error);
+        alert('No se pudo actualizar la materia');
+      }
+    );
+  } else {
+    this.materiasService.crearMateria(materiaPayload).subscribe(
+      () => {
+        alert('Materia registrada correctamente');
+        this.router.navigate(['/materias-lista']);
+      },
+      (error) => {
+        console.log('Error al registrar materia', error);
+        if (error.error && error.error.nrc) {
+          this.errors.nrc = error.error.nrc;
+        } else {
+          alert('No se pudo registrar la materia');
+        }
+      }
+    );
+  }
+}
   cancelar() {
     this.router.navigate(['/materias-lista']);
   }
