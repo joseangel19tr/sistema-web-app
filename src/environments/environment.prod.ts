@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://sistema-api-sv42.onrender.com'
+  url_api: 'https://sistema-api-sv42.onrender.com'
 };
