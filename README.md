@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # SistemaBuapWebapp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.11.
@@ -29,3 +30,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 =======
 # web-app-sistema
 >>>>>>> 4ab58c81d248135478ce023604e1ffda9f059dea
+=======
+# sistema-web-app
+>>>>>>> 2969992de32d226040926934d72a91b505da27ae
